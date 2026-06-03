@@ -13,7 +13,8 @@ if connection:
 
     if connection:
         seed.create_table(connection)
-        seed.insert_data(connection, 'user_data.csv')
+        # seed.insert_data(connection, 'user_data.csv')
+        seed.insert_data(connection, 'data.txt')
         cursor = connection.cursor()
         cursor.execute(
             f"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'ALX_prodev';")
