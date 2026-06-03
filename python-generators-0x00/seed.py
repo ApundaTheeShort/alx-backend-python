@@ -33,11 +33,38 @@ def create_database(connection):
 
 
 def connect_to_prodev():
-    pass
+    try:
+        connection = mysql.connector.connect(
+            host='localhost',
+            database='ALX_prodev',
+            user='root',
+            password='Zootopia.1'
+        )
+        if connection.is_connected():
+            print("Connected to ALX_prodev database")
+            return connection
+    except Error as e:
+        print(f"Error connecting to ALX_prodev database: {e}")
+        return None
 
 
 def create_table(connection):
-    pass
+    cursor = connection.cursor()
+    try:
+        cursor.execute("""
+                        CREATE TABLE IF NOT EXISTS user_data (
+                            user_id PRIMARY KEY, UUID, Indexed,
+                            name VARCHAR(100) NOT NULL,
+                            email VARCHAR(100) NOT NULL,
+                            age DECIMAL NOT NULL
+                            )
+            """)
+        cursor.commit()
+    except Error as e:
+        print(f"Found an error while creating a table {e}")
+
+    finally:
+        cursor.close()
 
 
 def insert_data(connection, csv_file):
