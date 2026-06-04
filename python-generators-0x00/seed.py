@@ -38,7 +38,7 @@ def connect_to_prodev():
             host='localhost',
             database='ALX_prodev',
             user='root',
-            password='password'
+            password='Zootopia.1'
         )
         if connection.is_connected():
             print("Connected to ALX_prodev database")
@@ -53,10 +53,10 @@ def create_table(connection):
     try:
         cursor.execute("""
                         CREATE TABLE IF NOT EXISTS user_data(
-                            user_id BINARY(16) PRIMARY KEY,
+                            user_id INT PRIMARY KEY AUTO_INCREMENT,
                             name VARCHAR(100) NOT NULL,
                             email VARCHAR(100) NOT NULL,
-                            age INT NOT NULL
+                            age DECIMAL(3, 0) NOT NULL
                             )
             """)
         connection.commit()
@@ -73,9 +73,19 @@ def insert_data(connection, filename):
         with open(filename, 'r') as file:
             for line in file:
                 name, email, age = line.strip().split(',')
+                # remove surrounding quotes and whitespace from fields
+                name = name.strip().strip('"')
+                email = email.strip().strip('"')
+                age = age.strip().strip('"')
+                # convert age to integer for DECIMAL(3,0) column
+                try:
+                    age_val = int(age)
+                except ValueError:
+                    # skip or set a default if age is invalid
+                    continue
                 cursor.execute(
                     "INSERT INTO user_data (name, email, age) VALUES (%s, %s, %s)",
-                    (name, email, age)
+                    (name, email, age_val)
                 )
         connection.commit()
         print("Data inserted successfully")
